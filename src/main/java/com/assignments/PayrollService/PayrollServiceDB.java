@@ -3,7 +3,9 @@ package com.assignments.PayrollService;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Enumeration;
 
 public class PayrollServiceDB {
@@ -16,6 +18,7 @@ public class PayrollServiceDB {
 		String password = "Aman";
 
 		databaseConnection(jdbcURL, userName, password); // Creating Database Connection
+		readEmployeePayrollDataFromDB(); // Retrieving Data From Database
 		closeConnection(); // Closing The Connection After Execution
 	}
 
@@ -46,6 +49,24 @@ public class PayrollServiceDB {
 		while (driverList.hasMoreElements()) {
 			Driver driverClass = (Driver) driverList.nextElement();
 			System.out.println("-> " + driverClass.getClass().getName());
+		}
+	}
+
+	// Retrieve The Employee Payroll Data From Data
+	private static void readEmployeePayrollDataFromDB() {
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery("select * from Employee_payroll");
+			System.out.println("\n" + result + " records retrieved.");
+			while (result.next()) {
+				System.out.print("ID->" + result.getInt("ID") + " : ");
+				System.out.print("Name->" + result.getString("Name") + " : ");
+				System.out.print("Salary->" + result.getString("Salary") + " : ");
+				System.out.print("StartDate->" + result.getString("StartDate") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
