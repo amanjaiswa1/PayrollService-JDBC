@@ -24,6 +24,7 @@ public class PayrollServiceDB {
 		updateSalaryUsingPreparedStatement(); // Updating Salary Using Prepared Statement
 		readPayrollDataByName(); // Retrieving Payroll Data By Name Using Prepared Statement
 		displayRecordsWithinGivenDateRange(); // Retrieving Data Within Given Date Range
+		databaseFunctions();// Using Database Functions(SUM, AVG, MIN, MAX,COUNT)
 		closeConnection(); // Closing The Connection After Execution
 	}
 
@@ -135,6 +136,65 @@ public class PayrollServiceDB {
 				System.out.print("Name->" + result.getString("Name") + " : ");
 				System.out.print("Salary->" + result.getFloat("Salary") + " : ");
 				System.out.print("StartDate->" + result.getDate("StartDate") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Use Database Functions(SUM, AVG, MIN, MAX,COUNT) To Do Analysis By Gender
+	private static void databaseFunctions() {
+		try {
+			Statement statement = connection.createStatement();
+			
+			// SUM Function
+			ResultSet result = statement
+					.executeQuery("SELECT SUM(Salary) as TotalSUM, Gender FROM employee_payroll GROUP BY gender;");
+			System.out.println("\n" + result + " records retrieved.");
+			System.out.println("\n:: SUM ::");
+			while (result.next()) {
+				System.out.print("Sum->" + result.getString("TotalSUM") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+			
+			// AVG Function
+			result = statement
+					.executeQuery("SELECT AVG(Salary) as Average, Gender FROM employee_payroll GROUP BY gender;");
+			System.out.println("\n" + result + " records retrieved.");
+			System.out.println("\n:: AVERAGE ::");
+			while (result.next()) {
+				System.out.print("Average->" + result.getString("Average") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+			
+			// MIN Function
+			result = statement
+					.executeQuery("SELECT MIN(Salary) as Minimum, Gender FROM employee_payroll GROUP BY gender;");
+			System.out.println("\n" + result + " records retrieved.");
+			System.out.println("\n:: MINIMUM ::");
+			while (result.next()) {
+				System.out.print("Minimum->" + result.getString("Minimum") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+			
+			// MAX Function
+			result = statement
+					.executeQuery("SELECT MAX(Salary) as Maximum, Gender FROM employee_payroll GROUP BY gender;");
+			System.out.println("\n" + result + " records retrieved.");
+			System.out.println("\n:: MAXIMUM ::");
+			while (result.next()) {
+				System.out.print("Maximum->" + result.getString("Maximum") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+			
+			// COUNT Function
+			result = statement
+					.executeQuery("SELECT COUNT(Salary) as Count, Gender FROM employee_payroll GROUP BY gender;");
+			System.out.println("\n" + result + " records retrieved.");
+			System.out.println("\n:: COUNT ::");
+			while (result.next()) {
+				System.out.print("Count->" + result.getString("Count") + " : ");
 				System.out.print("Gender->" + result.getString("Gender") + "\n");
 			}
 		} catch (SQLException e) {
