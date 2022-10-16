@@ -22,6 +22,7 @@ public class PayrollServiceDB {
 		readEmployeePayrollDataFromDB(); // Retrieving Data From Database
 		updateSalaryUsingStatement(); // Updating Salary Using Statement
 		updateSalaryUsingPreparedStatement(); // Updating Salary Using Prepared Statement
+		readPayrollDataByName(); // Retrieving Payroll Data By Name Using Prepared Statement
 		closeConnection(); // Closing The Connection After Execution
 	}
 
@@ -55,7 +56,7 @@ public class PayrollServiceDB {
 		}
 	}
 
-	// Retrieve The Employee Payroll Data From Data
+	// Retrieve The Employee Payroll Data From Database
 	private static void readEmployeePayrollDataFromDB() {
 		try {
 			Statement statement = connection.createStatement();
@@ -96,6 +97,26 @@ public class PayrollServiceDB {
 			Integer recordUpdated = preparedStatement.executeUpdate();
 			System.out.println("\nRecords Updated(Prepared Statement): " + recordUpdated);
 			readEmployeePayrollDataFromDB(); // Retrieving Data From Database
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Retrieve The Employee Payroll Data By Name
+	private static void readPayrollDataByName() {
+		try {
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("Select * from Employee_payroll where Name=?");
+			preparedStatement.setString(1, "Chaya");
+			ResultSet result = preparedStatement.executeQuery();
+			System.out.println("\n" + result + " records retrieved.");
+			while (result.next()) {
+				System.out.print("ID->" + result.getInt("ID") + " : ");
+				System.out.print("Name->" + result.getString("Name") + " : ");
+				System.out.print("Salary->" + result.getString("Salary") + " : ");
+				System.out.print("StartDate->" + result.getString("StartDate") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
