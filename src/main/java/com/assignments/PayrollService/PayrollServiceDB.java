@@ -19,6 +19,7 @@ public class PayrollServiceDB {
 
 		databaseConnection(jdbcURL, userName, password); // Creating Database Connection
 		readEmployeePayrollDataFromDB(); // Retrieving Data From Database
+		updateSalaryUsingStatement(); // Updating Salary Using Statement
 		closeConnection(); // Closing The Connection After Execution
 	}
 
@@ -65,6 +66,19 @@ public class PayrollServiceDB {
 				System.out.print("StartDate->" + result.getString("StartDate") + " : ");
 				System.out.print("Gender->" + result.getString("Gender") + "\n");
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Update Employee Salary By Using Employee Name (Statement)
+	private static void updateSalaryUsingStatement() {
+		try {
+			Statement statement = connection.createStatement();
+			String query = "update employee_payroll set Salary=40000.00 where Name='Aarya' ";
+			Integer recordUpdated = statement.executeUpdate(query);
+			System.out.println("\nRecords Updated: " + recordUpdated);
+			readEmployeePayrollDataFromDB(); // Retrieving Data From Database
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
