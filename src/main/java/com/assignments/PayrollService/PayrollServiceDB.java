@@ -23,6 +23,7 @@ public class PayrollServiceDB {
 		updateSalaryUsingStatement(); // Updating Salary Using Statement
 		updateSalaryUsingPreparedStatement(); // Updating Salary Using Prepared Statement
 		readPayrollDataByName(); // Retrieving Payroll Data By Name Using Prepared Statement
+		displayRecordsWithinGivenDateRange(); // Retrieving Data Within Given Date Range
 		closeConnection(); // Closing The Connection After Execution
 	}
 
@@ -115,6 +116,25 @@ public class PayrollServiceDB {
 				System.out.print("Name->" + result.getString("Name") + " : ");
 				System.out.print("Salary->" + result.getString("Salary") + " : ");
 				System.out.print("StartDate->" + result.getString("StartDate") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Retrieve The Employee Payroll Data In Given Date Range
+	public static void displayRecordsWithinGivenDateRange() {
+		try {
+			Statement statement = connection.createStatement();
+			String query = "Select * from employee_payroll where StartDate between '2017-01-01' and DATE(now())";
+			ResultSet result = statement.executeQuery(query);
+			System.out.println("\n" + result + " records retrieved.");
+			while (result.next()) {
+				System.out.print("ID->" + result.getInt("ID") + " : ");
+				System.out.print("Name->" + result.getString("Name") + " : ");
+				System.out.print("Salary->" + result.getFloat("Salary") + " : ");
+				System.out.print("StartDate->" + result.getDate("StartDate") + " : ");
 				System.out.print("Gender->" + result.getString("Gender") + "\n");
 			}
 		} catch (SQLException e) {
