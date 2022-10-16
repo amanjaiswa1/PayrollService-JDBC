@@ -3,6 +3,7 @@ package com.assignments.PayrollService;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,6 +21,7 @@ public class PayrollServiceDB {
 		databaseConnection(jdbcURL, userName, password); // Creating Database Connection
 		readEmployeePayrollDataFromDB(); // Retrieving Data From Database
 		updateSalaryUsingStatement(); // Updating Salary Using Statement
+		updateSalaryUsingPreparedStatement(); // Updating Salary Using Prepared Statement
 		closeConnection(); // Closing The Connection After Execution
 	}
 
@@ -77,7 +79,22 @@ public class PayrollServiceDB {
 			Statement statement = connection.createStatement();
 			String query = "update employee_payroll set Salary=40000.00 where Name='Aarya' ";
 			Integer recordUpdated = statement.executeUpdate(query);
-			System.out.println("\nRecords Updated: " + recordUpdated);
+			System.out.println("\nRecords Updated(Statement) : " + recordUpdated);
+			readEmployeePayrollDataFromDB(); // Retrieving Data From Database
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Update Employee Salary By Using Employee Name (Prepared Statement)
+	private static void updateSalaryUsingPreparedStatement() {
+		try {
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("UPdate employee_payroll set Salary=? where Name=? ");
+			preparedStatement.setDouble(1, 60000.00);
+			preparedStatement.setString(2, "Chaya");
+			Integer recordUpdated = preparedStatement.executeUpdate();
+			System.out.println("\nRecords Updated(Prepared Statement): " + recordUpdated);
 			readEmployeePayrollDataFromDB(); // Retrieving Data From Database
 		} catch (SQLException e) {
 			e.printStackTrace();
